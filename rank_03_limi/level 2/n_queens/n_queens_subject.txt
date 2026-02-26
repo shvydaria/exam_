@@ -1,0 +1,55 @@
+Assignment name   : n_queens
+Expected files    : n_queens.c
+Allowed functions : write, malloc, free
+--------------------------------------------------------------------------------
+Write a program that solves the N-Queens problem and prints one valid arrangement.
+Usage:
+  ./n_queens N
+Board:
+Place N queens on an N×N board so that none attack each other (no shared row,
+column, or diagonal).
+Output:
+Print the board as N lines of N characters:
+  'Q' for a queen, '.' for empty.
+If no solution exists (e.g. N = 2 or 3), print "No solution\n".
+Algorithm:
+Use recursive backtracking placing one queen per column.
+Maintain arrays (or checks) for:
+  - occupied rows
+  - occupied main diagonals
+  - occupied anti-diagonals
+Edge cases:
+- N < 1 invalid → non-zero exit
+- N = 1 → single queen
+Memory:
+Allocate only what is needed for tracking; free before exit.
+Deterministic first-found solution acceptable.
+
+--------------------------------------------------------------------------------
+Explanation:
+Place queens column by column ensuring each new queen is not in conflict with previously placed queens.
+
+Usage:
+  ./n_queens 4
+
+Example:
+For N=4 one valid output:
+.Q..
+...Q
+Q...
+..Q.
+
+Algorithm:
+1. For column c from 0..N-1 try each row r:
+   - Check row[r], diag1[r+c], diag2[r-c+N-1] are free.
+   - Place queen; mark those structures.
+   - Recurse to next column.
+   - If recursion succeeds propagate success; else backtrack marks.
+2. If column == N, solution found.
+
+Key points:
+- Conflict checks O(1) using three boolean arrays.
+- Total search drastically pruned vs naive grid scan.
+- Backtracking ensures systematic exploration.
+- Time complexity grows quickly; acceptable for typical educational N (<= 15).
+- Stops at first solution; can be extended to count all.

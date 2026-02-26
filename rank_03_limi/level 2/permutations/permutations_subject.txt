@@ -1,0 +1,52 @@
+Assignment name   : permutations
+Expected files    : permutations.c
+Allowed functions : write, malloc, free
+--------------------------------------------------------------------------------
+Write a program that prints all permutations of the integers from 1 to N.
+Usage:
+  ./permutations N
+Where N is a positive integer (N >= 1, reasonably small: e.g. N <= 10).
+Output:
+Each permutation on its own line, numbers separated by a single space.
+Order: lexicographic or any deterministic order is acceptable.
+Algorithm:
+Use backtracking with in-place swapping (O(N) extra space).
+Edge cases:
+- N = 1 → print "1".
+- Invalid N (non-numeric or <= 0) → return non-zero.
+Performance note:
+N! grows quickly; no need to optimize further for large N.
+No memory leaks.
+
+--------------------------------------------------------------------------------
+Explanation:
+Generate every ordering of the sequence 1..N exactly once using recursion and swapping in-place.
+
+Usage:
+  ./permutations 3
+
+Example:
+Input: 3
+Output (one possible order):
+1 2 3
+1 3 2
+2 1 3
+2 3 1
+3 2 1
+3 1 2
+
+Algorithm:
+1. Fill an array a[i] = i+1.
+2. Recurse(position):
+   - If position == N: print array.
+   - For i from position to N-1:
+       swap(a[position], a[i])
+       Recurse(position+1)
+       swap back (backtrack).
+3. Start with position = 0.
+
+Key points:
+- In-place swapping avoids extra arrays.
+- Backtracking restores state after each branch.
+- Time complexity O(N * N!) (printing dominates).
+- Memory usage O(N) for array + recursion stack.

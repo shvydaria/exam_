@@ -1,0 +1,140 @@
+filter.c
+
+write a program that takes exactly one argument when it's run (nothing more, nothing less). That argument is a string.
+
+The program should read from stdin and write everything to stdout, except that every time s appears in the input,
+ it needs to be replaced with * characters — as many * as the length of s.
+
+If there's an error with read or malloc, the program needs to print something like:
+"Error: " to stderr and return 1.
+
+If no argument is passed, the argument is empty, or there are too many arguments, it should just return 1.
+
+$> echo 'abcdrfgiabchiabc' | ./filter abc | cat -e
+**drfgi*hi**
+$>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define BUFFER_SIZE 5
+
+int str_length(char *s)
+{
+	int len = 0;
+	while (s[len])
+		len++;
+	return len;
+}
+
+void replace_and_print(char *input, char *target)
+{
+	int i = 0;
+	int target_len = str_length(target);
+	while (input[i])
+	{
+		int j = 0;
+		while (target[j] && target[j] == input[i + j])
+			j++;
+		if (j == target_len)
+		{
+			for (int k = 0; k < target_len; k++)
+				write(1, "*", 1);
+			i += target_len;
+		}
+		else
+		{
+			write(1, &input[i], 1);
+			i++;
+		}
+	}
+}
+
+int main(int argc, char *argv[])
+{
+	char *final_buffer = NULL;
+	char *temp_buffer;
+	int total_size = 0;
+	int read_count = 0;
+	char read_chunk[BUFFER_SIZE];
+
+	if (argc != 2 || argv[1][0] == '\0')
+		return 1;
+
+	while ((read_count = read(0, read_chunk, BUFFER_SIZE)))
+	{
+		temp_buffer = realloc(final_buffer, total_size + read_count + 1);
+		if (!temp_buffer)
+		{
+			perror("Error: ");
+			free(final_buffer);
+			return 1;
+		}
+		final_buffer = temp_buffer;
+		memmove(final_buffer + total_size, read_chunk, read_count);
+		total_size += read_count;
+		final_buffer[total_size] = 0;
+	}
+
+	if (read_count < 0)
+	{
+		perror("Error: ");
+		free(final_buffer);
+		return 1;
+	}
+
+	if (!final_buffer)
+		return 0;
+
+	replace_and_print(final_buffer, argv[1]);
+	free(final_buffer);
+	return 0;
+}

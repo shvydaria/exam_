@@ -1,0 +1,101 @@
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+powerset.c
+
+write a program called powerset that takes an integer n as the first argument, and then a list of distinct integers after that.
+
+The goal is to find and print all the subsets from that list where the sum of the elements in the subset equals n.
+
+It doesn't matter in what order I print the subsets (like one can come before the other), but inside each subset,
+the numbers should stay in the same order as they were in the original list. So for example, if the input is:
+
+$> ./powerset 5 1 2 3 4 5| cat -e
+2 3
+5
+1 4
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+
+void display_combo(int *combo, int size)
+{
+	int i = 0;
+	while (i < size)
+	{
+		printf("%d", combo[i]);
+		if (i < size - 1)
+			printf(" ");
+		i++;
+	}
+	printf("\n");
+}
+
+void find_combinations(int *input_set, int *current_combo, int input_size, int combo_size, int index, int current_sum, int target_sum, int *has_result)
+{
+	if (index == input_size)
+	{
+		if (current_sum == target_sum)
+		{
+			display_combo(current_combo, combo_size);
+			*has_result = 1;
+		}
+		return;
+	}
+	find_combinations(input_set, current_combo, input_size, combo_size, index + 1, current_sum, target_sum, has_result);
+	current_combo[combo_size] = input_set[index];
+	find_combinations(input_set, current_combo, input_size, combo_size + 1, index + 1, current_sum + input_set[index], target_sum, has_result);
+}
+
+int is_valid_args(int argc, char *argv[])
+{
+	int i = 1;
+	while (i < argc)
+	{
+		int j = 0;
+		if (argv[i][j] == '-' || argv[i][j] == '+')
+			j++;
+		while (argv[i][j])
+		{
+			if (argv[i][j] >= '0' && argv[i][j] <= '9')
+				j++;
+			else
+				return 0;
+		}
+		i++;
+	}
+	return 1;
+}
+
+int main(int argc, char *argv[])
+{
+	if (argc < 2 || argv[1][0] == '\0')
+		return 1;
+
+	if (!is_valid_args(argc, argv))
+		return 1;
+
+	int target_sum = atoi(argv[1]);
+	int input_size = argc - 2;
+
+	int *input_set = malloc(input_size * sizeof(int));
+	int *current_combo = malloc(input_size * sizeof(int));
+	if (!input_set || !current_combo)
+		return 1;
+
+	int i = 0;
+	while (i < input_size)
+	{
+		input_set[i] = atoi(argv[i + 2]);
+		i++;
+	}
+
+	int has_result = 0;
+	find_combinations(input_set, current_combo, input_size, 0, 0, 0, target_sum, &has_result);
+	free(input_set);
+	free(current_combo);
+	if (!has_result)
+		return 0;
+	return 0;
+}

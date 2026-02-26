@@ -53,3 +53,31 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# --- Compilation Files ---
+# Object files created during make
+*.o
+*.d
+# Archives (Static libraries like libft.a)
+*.a
+# Temporary build folders 
+obj/
+build/
+
+# --- System & OS ---
+# Mac junk
+.DS_Store
+.DS_Store?
+# Valgrind logs
+valgrind-out.txt
+*.log
+
+# VS Code settings (local only)
+.vscode/
+# Vim swap files
+*.swp
+*.swo
+# CLion / JetBrains
+.idea/
+cmake-build-debug/
+.heredoc_tmp
