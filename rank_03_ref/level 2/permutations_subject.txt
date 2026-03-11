@@ -50,3 +50,6 @@ Key points:
 - Backtracking restores state after each branch.
 - Time complexity O(N * N!) (printing dominates).
 - Memory usage O(N) for array + recursion stack.
+
+-----
+we can do 2 versions, 1 is for solutions in alphabetical order.

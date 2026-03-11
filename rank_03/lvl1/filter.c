@@ -1,50 +1,59 @@
 #define _GNU_SOURCE
+#include <errno.h>
 #include <fcntl.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-#ifndef BUFFER_SIZE
-#define BUFFER_SIZE 42
-#endif
-
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-	if(ac != 2) {
-		return 1;
-	}
+	// Check for exactly 1 non-empty argument
+	if (ac != 2 || av[1][0] == '\0')
+		return (1);
 
-	char buffer[BUFFER_SIZE];
-	int bytes;
-	char *temp;
+	char buffer[1024]; // Standard buffer size
 	char *res = NULL;
-	int res_size = 0;
-	char *pos;
+	char *temp;
 	char *find = av[1];
-	int find_size = strlen(av[1]);
+	char *pos;
+	int find_len = strlen(find);
+	int res_size = 0;
+	int bytes;
 
-	while((bytes = read(0, buffer, BUFFER_SIZE))) {
-		temp = realloc(res, bytes + res_size + 1);
+	// 1. READ Loop
+	while ((bytes = read(0, buffer, sizeof(buffer))) > 0)
+	{
+		temp = realloc(res, res_size + bytes + 1);
 		if (!temp)
-			return free(res), 1;
+		{
+			free(res);
+			perror("Error");
+			return (1);
+		}
 		res = temp;
 		memmove(res + res_size, buffer, bytes);
 		res_size += bytes;
-		res[res_size] = 0;
+		res[res_size] = '\0';
 	}
 
 	if (bytes < 0)
-		return free(res), 1;
-	if (!res)
-		return free(res), 1;
-
-	while ((pos = memmem(res, res_size, find, find_size))) {
-		for (int i = 0; i < find_size; i++)
-			pos[i] = '*';
+	{
+		free(res);
+		perror("Error");
+		return (1);
 	}
 
-	printf("%s", res);
+	if (!res)
+		return (0);
+
+	// 2. FILTER Loop
+	while ((pos = memmem(res, res_size, find, find_len))) {
+		for (int i = 0; i < find_len; i++)
+			pos[i] = '*';
+	}
+	// 3. OUTPUT
+	write(1, res, res_size);
 	free(res);
-	return 0;
+	return (0);
 }

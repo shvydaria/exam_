@@ -34,7 +34,7 @@ int main(int ac, char **av)
 	char buffer[BUFFER_SIZE]; // Temporary buffer for reading input
 	char *temp;
 	char *res = NULL;        // Pointer to dynamically growing result buffer
-	char *pos;
+	char *pos; // position
 	char *find = av[1];      // The search string to filter
 	int res_size = 0;        // Current size of the result buffer
 	int find_size = strlen(av[1]); // Length of the search string
