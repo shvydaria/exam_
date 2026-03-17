@@ -66,7 +66,7 @@ int main(int ac, char **av) {
     int i = 0;
 
     if(ac != 2)
-        return(0);
+        return(1);
 
     len = ft_strlen(av[1]);
     sort_string(av[1]);
@@ -83,3 +83,4 @@ int main(int ac, char **av) {
     free(used);
     return(0);
 }
+

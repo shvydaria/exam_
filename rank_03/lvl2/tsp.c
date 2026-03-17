@@ -26,7 +26,8 @@ void solve(int current_city, int count, float current_dist) {
 	int i;
 
 	if(count == n) {
-		float drive_home = calc_dist(x[current_city], y[current_city], x[0], y[0]);
+		float drive_home = calc_dist(x[current_city], 
+			y[current_city], x[0], y[0]);
 		float total_trip = current_dist + drive_home;
 		if (total_trip < min_dist) {
 			min_dist = total_trip;
@@ -38,7 +39,8 @@ void solve(int current_city, int count, float current_dist) {
 	while(i < n) {
 		if(visited[i] == 0) {
 			visited[i] = 1; // Place (Lock)
-			solve(i, count + 1, current_dist + calc_dist(x[current_city], y[current_city], x[i], y[i])); // Recurse
+			solve(i, count + 1, current_dist + calc_dist(x[current_city], 
+				y[current_city], x[i], y[i])); // Recurse
 			visited[i] = 0; // Undo (Backtrack)
 		}
 		i++;
