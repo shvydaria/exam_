@@ -57,14 +57,11 @@ void print_arr(int *arr) {
 
 void solve(int pos, int *arr) {
     int i;
-// reached end
     if (pos == n) {
         print_arr(arr);
         return;
     }
-// starting point
     i = pos;
-// backtracking
     while(i < n) {
         swap(&arr[pos], &arr[i]);
         solve(pos+1, arr);

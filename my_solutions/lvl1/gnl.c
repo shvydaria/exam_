@@ -8,11 +8,15 @@ char *join_and_free(char *s1, char *s2) {
     while (s2 && s2[j]) j++;
 
     res = malloc(i + j + 1);
-    if (!res) return (NULL);
+    if (!res) 
+        return (NULL);
 
     i = 0;
     if (s1) {
-        while (s1[i]) { res[i] = s1[i]; i++; }
+        while (s1[i]) { 
+            res[i] = s1[i]; 
+            i++; 
+        }
     }
     j = 0;
     while (s2[j]) {

@@ -73,9 +73,12 @@ void *ft_memmove(void *dest, const void *src, size_t n)
 
 char *get_next_line(int fd)
 {
+  // this
   static char b[BUFFER_SIZE + 1] = "";
   char *ret = NULL;
+  // end of this
   char *tmp = ft_strchr(b, '\n');
+  
   while(!tmp)
   {
     if (!str_append_str(&ret, b))
